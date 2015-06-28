@@ -1,0 +1,97 @@
+{% extends "template.base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}Insert/Edit Answers{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+    $(document).ready(function() {
+      /* Bind save button to save answer data */
+      $(".btn-answer-save:button").bind("click", saveAnswer);
+      /* Bind form field to save answer data */
+      $(".form-answer-field:input").bind("blur", saveAnswer);
+    });
+
+    function saveAnswer() {
+      var question_form = $(this).closest("form");
+      var save_button = question_form.find(".btn-answer-save");
+      /* Jquery ajax save */
+      save_button.button('saving');
+      var request = $.ajax({
+        type: question_form.attr('method'),
+        url: question_form.attr('action'),
+        data: question_form.serialize(),
+        cache: false
+      });
+      request.done(function(data) {
+        save_button.button('saved');
+        save_button.toggleClass("btn-primary btn-success");
+
+        setTimeout(function() {
+          save_button.toggleClass("btn-success btn-primary");
+        }, 3000);
+      });
+      request.fail(function(jqXHR, textStatus) {
+        alert("Request failed: " + textStatus);
+      });
+    }
+    </script>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+          <h1>{% if selected_question %}Edit Answer{% else %}Insert Answer{% endif %}</h1>
+      {% if saved %}<div class="alert alert-success">Answer has been successfully saved.</div>{% endif %}
+      {% if form.errors %}
+      <div class="alert alert-danger">
+        {{ form.errors.as_text }}
+      </div>
+      {% endif %}
+        </div>
+    </div>
+      <form class="form-basic" method="post" action="/prototype1/{{ question.id }}/save/">
+        {% csrf_token %}
+      <input type="hidden" name="qn_id" value="{{ question.id }}">
+       <div class="row">
+          <div id="alabel" class="col-md-1">
+                  <h3>TestInput:</h3>
+          </div>
+       </div>
+          <div class="row">
+          <div id="acontent" class="col-md-9">
+                  <textarea class="form-control form-answer-field" name="answer" placeholder="Your answer" rows="3" >{% for programming_inputs in ProgramCase.programming_inputs.all %}{% if programming_inputs.question == question %}{{ programming_inputs.programming_inputs }}{% endif %}{% endfor %}</textarea>
+                </div>
+           </div>
+          <div class="row">
+          <div id="alabel" class="col-md-1">
+                  <h3>Output:</h3>
+          </div>
+       </div>
+          <div class="row">
+          <div id="acontent" class="col-md-9">
+                  <textarea class="form-control form-answer-field" name="answer" placeholder="Your answer" rows="3" >{% for expected_outputs in ProgramCase.programming_inpu.all %}{% if programming_inputs.question == question %}{{ programming_inputs.programming_inputs }}{% endif %}{% endfor %}</textarea>
+                </div>
+           </div>
+        <div class="row">
+          <div id="alabel" class="col-md-1">
+                  <h3>Correctness:</h3>
+          </div>
+       </div>
+          <div class="row">
+          <div id="acontent" class="col-md-9">
+                  <textarea class="form-control form-answer-field" name="answer" placeholder="Your answer" rows="3" >{% for response in test.responses.all %}{% if response.question == question %}{{ response.response }}{% endif %}{% endfor %}</textarea>
+                </div>
+           </div>
+      <div class="row">
+          <div class="row form-group">
+          <div class="col-xs-12">
+            <div class="well">
+              {% if selected_question %}<button type="button" class="btn btn-primary btn-block btn-answer-save">Save Changes</button>{% else %}<button type="submit" class="btn btn-primary">Save </button>{% endif %}
+              <a href="#" onclick="history.back(); return false;" class="btn btn-danger">Cancel</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      </form>
+{% endblock %}

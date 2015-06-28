@@ -1,0 +1,147 @@
+{% extends "template.base.html" %}
+
+{% load staticfiles itemrtfilter %}
+
+{% block title %}Preview Question{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $(".btn-test-send:button").bind("click", testAnswer);
+    });
+
+    function testAnswer() {
+      var question_form = $(this).closest("form");
+      var save_button = question_form.find(".btn-test-send");
+
+      /* Jquery ajax save */
+      var request = $.ajax({
+        type: question_form.attr('method'),
+        url: question_form.attr('action'),
+        data: question_form.serialize(),
+        cache: false
+      });
+      request.done(function(data) {
+        alert("Result: " + data);
+      });
+      request.fail(function(jqXHR, textStatus) {
+        alert("Request failed: " + textStatus);
+      });
+    }
+    </script>
+{% endblock %}
+
+{% block content %}
+      <h1>Preview Question</h1>
+      <div id="contentrow" class="row">
+        <div class="col-lg-9">
+          <div class="row">
+            <div id="qlabel" class="col-md-1">
+              <h3>Q:</h3>
+            </div>
+            <div class="col-md-11">
+              {% autoescape off %}
+                {{ question.text|formatquestionforweb }}
+              {% endautoescape %}
+            </div>
+          </div>
+          <div class="row">
+            <div id="alabel" class="col-md-1">
+              <h3>A:</h3>
+            </div>
+            <input type="hidden" name="qid" value="{{question.id}}">
+          </div>
+          <div class="row">
+            <div id="tlabel" class="col-md-1">
+              <!-- Empty Label -->
+            </div>
+            <div id="tcontent" class="col-md-11" style="margin-top: 20px; margin-bottom: 0px">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  Test the output answers here:
+                </div>
+                <form method="post" action="/prototype/test/question/{{ question.id }}/">
+                  {% csrf_token %}
+                  <div class="panel-body">
+                    <div id="acontent" class="col-md-10">
+                      <input type="text" class="form-control form-answer-field" name="answer" placeholder="Test the answer">
+                    </div>
+                    <div id="asubmit" class="col-md-2">
+                      <button type="button" class="btn btn-primary btn-block btn-test-send">Test</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div id="practicecontentend"></div>
+        </div>
+        <div class="col-lg-3 visible-lg">
+          <div id="practicesidebar" class="panel panel-default">
+            <div class="panel-body">
+              <h5>Topic</h5>
+              <span class="label label-info">{{ question.topic }}</span>
+              <h5>Difficulty</h5>
+              {% if question.difficulty == 5 %}
+              <span class="label label-danger"> Very Difficult</span>
+              {% elif question.difficulty == 4 %}
+              <span class="label label-warning">Difficult</span>
+              {% elif question.difficulty == 3 %}
+              <span class="label label-warning">Average</span>
+              {% elif question.difficulty == 2 %}
+              <span class="label label-success">Easy</span>
+              {% elif question.difficulty == 1 %}
+              <span class="label label-success">Very Easy</span>
+              {% endif %}
+              <h5>Tags</h5>
+              {% if question.tags.all %}
+              {% for tag in question.tags.all %}
+              <span class="label label-default">{{ tag }}</span>
+              {% endfor %}
+              {% else %}
+              <span class="label label-default">No tags yet</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-9">
+          <div id="solrow" class="row">
+            <div id="sollabel" class="col-md-1">
+              <h3><span class="glyphicon glyphicon-book" title="Explination/Solution"></span> :</h3>
+            </div>
+            <div id="solcontent" class="col-md-11">
+              {% if question.solution %}
+              {{question.solution.content|linebreaksbr}}
+              {% else %}
+              <p>An explanation to the answer of this question is not available yet.</p>
+              <p>But you can <a href="#discussrow">join the discussion</a> to clarify your doubts!</p>
+              {% endif %}
+            </div>
+          </div>
+          <div id="discussrow" class="row">
+            <div id="discusslabel" class="col-md-1">
+              <h3><span class="glyphicon glyphicon-comment" title="Discussion"></span> :</h3>
+            </div>
+            <div id="discusscontent" class="col-md-11">
+              {% with question as object %}{% include "comments.html" %}{% endwith %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% if debug %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Debug Data <small>(Normally hidden from user)</small>
+        </div>
+        <div class="panel-body">
+          <p>LongQuestion: {{question.id}}</p>
+          <p>Difficulty (1-5): {{question.difficulty}}</p>
+          <p>Current Ability: {{debug.ability}}</p>
+          <p>Item info: {{question.question_info}}</p>
+        </div>
+      </div>
+      {% endif %}
+{% endblock %}

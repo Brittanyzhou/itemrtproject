@@ -1,0 +1,55 @@
+{% extends "template.base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}Insert/Edit Answer{% endblock %}
+
+{% block extrastyle %}
+    <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/tagit.ui-zendesk.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'js/jquery-ui-1.10.4.custom.min.js' %}"></script>
+    <script src="{% static 'js/tag-it.js' %}"></script>
+    <script type="text/javascript">
+    var retrievedTags = [{% for item, value in form.tags.field.choices %}'{{ value }}'{% if not forloop.last %},{% endif %}{% endfor %}];
+    </script>
+{% endblock %}
+{% block content %}
+      <h1>{% if programcase %}Edit Answer{% else %}Insert Answer{% endif %}</h1>
+      {% if saved %}<div class="alert alert-success">Answer has been successfully saved.</div>{% endif %}
+      {% if form.errors %}
+      <div class="alert alert-danger">
+        {{ form.errors.as_text }}
+      </div>
+      {% endif %}
+      <form class="form-basic" method="POST" role="form" >
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group{% if form.programming_inputs.errors %} has-error{% endif %}">
+              <label for="{{ form.programming_inputs.id_for_label }}">TestInput</label>
+              <textarea id="{{ form.programming_inputs.id_for_label }}" name="{{ form.programming_inputs.html_name }}" class="form-control" rows="4" placeholder="stdin">{{ form.programming_inputs.value|default_if_none:'' }}</textarea>
+            </div>
+          <div class="form-group{% if form.expected_outputs.errors %} has-error{% endif %}">
+              <label for="{{ form.expected_outputs.id_for_label }}">Output</label>
+              <textarea id="{{ form.expected_outputs.id_for_label }}" name="{{ form.expected_outputs.html_name }}" class="form-control" rows="4" placeholder="stdout">{{ form.expected_outputs.value|default_if_none:'' }}</textarea>
+            </div>
+          <div class="col-sm-6">
+            <label for="inputEmail3">Correctness</label>
+            <input type="text" class="form-control" id="???" placeholder="Optional, Default: 1.0" value="{{ selected_programcase.marks }}">
+          </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-22">
+            <div class="well">
+              {% if programcase %}<button type="submit" class="btn btn-primary">Save Changes</button>{% else %}<button type="submit" class="btn btn-primary">Insert Answer</button>{% endif %}
+              <a href="#" onclick="history.back(); return false;" class="btn btn-danger">Cancel</a>
+            </div>
+          </div>
+        </div>
+      </form>
+{% endblock %}

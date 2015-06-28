@@ -1,0 +1,4 @@
+For programming questions must notice:
+1:The question format must be noticed. Be according to the example qustions format I give to insert new questions in order to avoid class name error. 
+2: Until now, the programming question edit page just only show one group, so one group test data is fine.
+3: The java code you insert could be ended. Then it could return the right results. Otherwise, the JLS keep running all the time. 

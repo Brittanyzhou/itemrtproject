@@ -1,0 +1,150 @@
+
+<html lang="en">
+  <head>
+    
+<style type="text/css" media="screen">
+    #editor {
+        height: 300px;
+        box-shadow: 2px 2px 2px #888888;
+        font-size:14px;
+    }
+</style>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+      <script src="/static/js/respond.min.js"></script>
+    <![endif]-->
+
+    
+    
+    <meta name="robots" content="NONE,NOARCHIVE" />
+  </head>
+  <body>
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg-12">
+          <h1>Tutorial <small> on Control Structure</small><a href="/practice/end/8" class="btn btn-danger pull-right">End Tutorial Session</a></h1>
+        </div>
+      </div>
+      <div id="contentrow" class="row">
+        <div class="col-lg-9">
+          
+          <div id="qn" class="row">
+            <div id="qlabel" class="col-md-1">
+              <h3>Q:</h3>
+            </div>
+            <div class="col-md-11">
+              
+              Write a Java program that repeatedly reads an input character from the user and prints a message to state whether the character is an uppercase letter, a lowercase letter or a digit
+<br>
+<br>Note: Do not use fflush(stdin); instead try to use scanf() to clear the newline in the buffer.
+<br>
+<br><pre class="prettyprint linenums">#include &lt;stdio.h&gt;
+   int main() 
+   {
+        /*add your code here*/
+        return 0;
+   }
+
+</pre>
+
+              
+            </div>
+          </div>
+
+        <div id="file" class="row" style="display: none">
+            <div id="qlabel" class="col-md-1">
+              <h4>File:</h4>
+            </div>
+            <div class="col-md-11">
+              <pre class="prettyprint linenums">
+              
+              </pre>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 10px">
+            <form method="post" onsubmit="return getContent()">
+              <input type='hidden' name='csrfmiddlewaretoken' value='2aZ3VmfCQ5A5c1tcNMz2qxtKYRB0hdcK' />
+              <div id="alabel" class="col-md-1">
+                <h3>A:</h3>
+              </div>
+              <div class="col-md-9 form-group ">
+                  <textarea id="ans" name="ans" style="display:none"></textarea>
+                  <div id="editor"></div>
+              </div>
+              <div id="asubmit" class="col-md-2">
+                <button id="practicesubmitbtn" type="submit" data-loading-text="Submitting..." class="btn btn-primary btn-block">Submit</button>
+              </div>
+              <input type="hidden" name="qid" value="31">
+            </form>
+          </div>
+          <div id="practicecontentend"></div>
+        </div>
+        <div class="col-lg-3 visible-lg">
+          <div id="practicesidebar" class="panel panel-default">
+            <div class="panel-body">
+              <h5>Difficulty</h5>
+              <span style="font-size: larger">
+              
+              <span class="label label-success">Easy</span>
+              
+              </span>
+              <h5>Topic</h5>
+              <span class="label label-info">Control Structure</span>
+              <h5>Tags</h5>
+              
+              <span class="label label-default">No tags yet</span>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+     <!-- Modal -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">Flag Question</h4>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+      
+
+    </div>
+
+    
+    
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+    <script src="/static/js/jquery.plugin.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/chart.min.js"></script>
+    <script src="/static/js/run_prettify.js"></script>
+    <script src="/static/js/jquery.countdown.min.js"></script>
+    <script src="/static/js/itemrtweb.js"></script>
+    
+    <script src="/static/ace/min/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+    var editor = ace.edit("editor");
+    var lang_mode;
+    
+    lang_mode="c_cpp";
+    
+    editor.setTheme("ace/theme/xcode");
+    editor.session.setMode("ace/mode/"+lang_mode);
+    editor.session.setUseWrapMode(true);
+
+    function getContent(){
+        document.getElementById("ans").value = editor.session.getValue();
+    }
+    </script>
+
+  </body>
+</html>
